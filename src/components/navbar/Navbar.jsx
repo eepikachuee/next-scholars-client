@@ -129,7 +129,11 @@ const Navbar = ({ isLoggedIn, userRole }) => {
               </button>
             )}
             {!isLoggedIn && (
-              <NavLink to="/registration" className={navItemClasses}>
+              <NavLink
+                to="/registration"
+                className={navItemClasses}
+                onClick={() => setMenuOpen(false)}
+              >
                 Registration
               </NavLink>
             )}
