@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 
 const ThemeToggle = () => {
   const [isDark, setIsDark] = useState(() => {
@@ -20,20 +21,22 @@ const ThemeToggle = () => {
   }, [isDark]);
 
   return (
-    <div>
-      <button
-        onClick={() => setIsDark(!isDark)}
-        className="p-2 rounded-full shadow-md bg-accent dark:bg-gray-800 transition-all duration-300"
+    <button
+      onClick={() => setIsDark(!isDark)}
+      className="relative w-14 h-8 flex items-center px-1 bg-gray-300 dark:bg-gray-700 rounded-full transition-colors duration-300 focus:outline-none"
+    >
+      <div
+        className={`absolute left-1 top-1 w-6 h-6 flex items-center justify-center rounded-full bg-white shadow-md transform transition-transform duration-300 ${
+          isDark ? "translate-x-6" : ""
+        }`}
       >
         {isDark ? (
-          //   <Sun className="w-5 h-5 text-yellow-400" />
-          <p>Sun</p>
+          <Moon className="w-4 h-4 text-gray-800" />
         ) : (
-          //   <Moon className="w-5 h-5 text-white" />
-          <p>Moon</p>
+          <Sun className="w-4 h-4 text-yellow-500" />
         )}
-      </button>
-    </div>
+      </div>
+    </button>
   );
 };
 
