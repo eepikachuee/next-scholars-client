@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AuthContext } from "../providers/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router";
 
 const Registration = () => {
   const { handleCreateUser, updateUser } = useContext(AuthContext);
@@ -116,9 +117,9 @@ const Registration = () => {
 
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <a href="/login" className="text-primary underline">
+          <Link to="/login" className="text-primary underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
 
