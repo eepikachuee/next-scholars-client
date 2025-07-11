@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import { AuthContext } from "@/providers/AuthContext"; // update the path as needed
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import GoogleLoginButton from "@/components/button/GoogleLoginButton";
 
 const Login = () => {
   const { handleSignInUser } = useContext(AuthContext);
@@ -13,19 +14,30 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    setError,
   } = useForm();
 
-  const onSubmit = async (data) => {
-    const { email, password } = data;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
+  const onSubmit = async (data) => {
     try {
-      await handleSignInUser(email, password);
+      await handleSignInUser(data.email, data.password);
       toast.success("Login successful");
-      reset();
-      // Optional: navigate("/dashboard/user")
+      navigate(from, { replace: true });
     } catch (err) {
-      toast.error(err.message || "Login failed");
+      const errorCode = err.code;
+
+      if (errorCode === "auth/user-not-found") {
+        setError("email", { message: "No user found with this email." });
+      } else if (errorCode === "auth/wrong-password") {
+        setError("password", { message: "Incorrect password." });
+      } else if (errorCode === "auth/invalid-email") {
+        setError("email", { message: "Invalid email format." });
+      } else {
+        toast.error(err.message || "Something went wrong");
+      }
     }
   };
 
@@ -37,12 +49,11 @@ const Login = () => {
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Email Field */}
-          <div className="flex flex-col space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
               {...register("email", { required: "Email is required" })}
             />
             {errors.email && (
@@ -50,13 +61,11 @@ const Login = () => {
             )}
           </div>
 
-          {/* Password Field */}
-          <div className="flex flex-col space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
-              placeholder="********"
               {...register("password", { required: "Password is required" })}
             />
             {errors.password && (
@@ -69,12 +78,15 @@ const Login = () => {
             Login
           </Button>
         </form>
+
         <p className="text-sm text-center text-muted-foreground">
           Don't have an account?{" "}
           <Link to="/registration" className="text-primary hover:underline">
             Register
           </Link>
         </p>
+
+        <GoogleLoginButton></GoogleLoginButton>
       </div>
     </div>
   );

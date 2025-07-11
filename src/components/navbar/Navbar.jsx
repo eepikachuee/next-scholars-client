@@ -1,18 +1,33 @@
 import { NavLink } from "react-router";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Menu } from "lucide-react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../providers/AuthContext";
+import { Button } from "@/components/ui/button";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 import ThemeToggle from "../button/ThemeToggle";
 
-const Navbar = ({ isLoggedIn, userRole }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+const Navbar = () => {
+  const { user, handleSignOutUser } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
 
   const navItemClasses = ({ isActive }) =>
-    `block transition px-3 py-2 rounded-md text-base font-medium ${
+    `transition px-3 py-2 rounded-md text-sm font-medium ${
       isActive ? "text-primary font-semibold" : "text-muted-foreground"
     }`;
 
+  const role = user?.role || "user";
+
   return (
-    <header className="w-full px-4 py-3 shadow-md dark:bg-gray-900 bg-white">
+    <header className="w-full px-4 py-3 shadow-sm bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <NavLink to="/" className="text-2xl font-bold text-primary">
@@ -20,130 +35,133 @@ const Navbar = ({ isLoggedIn, userRole }) => {
         </NavLink>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center space-x-4 ml-auto">
+        <nav className="hidden md:flex items-center space-x-4">
           <NavLink to="/" className={navItemClasses}>
             Home
           </NavLink>
           <NavLink to="/scholarships" className={navItemClasses}>
-            All Scholarships
+            Scholarships
           </NavLink>
-          {isLoggedIn && userRole === "user" && (
+
+          {user && role === "user" && (
             <NavLink to="/dashboard/user" className={navItemClasses}>
               User Dashboard
             </NavLink>
           )}
-          {isLoggedIn && userRole === "admin" && (
+          {user && role === "admin" && (
             <NavLink to="/dashboard/admin" className={navItemClasses}>
               Admin Dashboard
             </NavLink>
           )}
-          {!isLoggedIn ? (
+
+          {!user ? (
             <NavLink to="/login" className={navItemClasses}>
               Login
             </NavLink>
           ) : (
-            <button
-              onClick={() => console.log("Logout")}
-              className="text-sm px-3 py-2 rounded-md bg-destructive text-white hover:bg-destructive/90"
-            >
+            <Button size="sm" variant="destructive" onClick={handleSignOutUser}>
               Logout
-            </button>
+            </Button>
           )}
-          {!isLoggedIn && (
-            <NavLink to="/registration" className={navItemClasses}>
-              Registration
+          {!user && (
+            <NavLink
+              to="/registration"
+              className={navItemClasses}
+              onClick={() => setOpen(false)}
+            >
+              Register
             </NavLink>
           )}
           <ThemeToggle />
         </nav>
 
-        {/* Hamburger */}
-        <button
-          className="md:hidden p-2 ml-auto"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {/* Mobile Drawer Trigger */}
+        <div className="md:hidden">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Open menu">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="right" className="w-64">
+              <SheetHeader>
+                <SheetTitle asChild>
+                  <VisuallyHidden>Navigation Menu</VisuallyHidden>
+                </SheetTitle>
+                <SheetDescription>Menu</SheetDescription>
+              </SheetHeader>
+
+              <div className="flex flex-col gap-3 mt-6">
+                <NavLink
+                  to="/"
+                  className={navItemClasses}
+                  onClick={() => setOpen(false)}
+                >
+                  Home
+                </NavLink>
+                <NavLink
+                  to="/scholarships"
+                  className={navItemClasses}
+                  onClick={() => setOpen(false)}
+                >
+                  Scholarships
+                </NavLink>
+                {user && role === "user" && (
+                  <NavLink
+                    to="/dashboard/user"
+                    className={navItemClasses}
+                    onClick={() => setOpen(false)}
+                  >
+                    User Dashboard
+                  </NavLink>
+                )}
+                {user && role === "admin" && (
+                  <NavLink
+                    to="/dashboard/admin"
+                    className={navItemClasses}
+                    onClick={() => setOpen(false)}
+                  >
+                    Admin Dashboard
+                  </NavLink>
+                )}
+                {!user ? (
+                  <NavLink
+                    to="/login"
+                    className={navItemClasses}
+                    onClick={() => setOpen(false)}
+                  >
+                    Login
+                  </NavLink>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => {
+                      handleSignOutUser();
+                      setOpen(false);
+                    }}
+                  >
+                    Logout
+                  </Button>
+                )}
+                {!user && (
+                  <NavLink
+                    to="/registration"
+                    className={navItemClasses}
+                    onClick={() => setOpen(false)}
+                  >
+                    Register
+                  </NavLink>
+                )}
+
+                {/* Optional: Add close on toggle as well if needed */}
+                <ThemeToggle />
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
-
-      {/* Mobile Nav Drawer */}
-      {menuOpen && (
-        <>
-          {/* Background Overlay */}
-          <div
-            className="fixed inset-0 bg-black/40 z-40"
-            onClick={() => setMenuOpen(false)}
-          />
-
-          {/* Drawer Menu */}
-          <div className="fixed top-0 right-0 w-64 h-full bg-white dark:bg-gray-900 z-50 p-6 space-y-4 shadow-lg transition-all">
-            <NavLink
-              to="/"
-              className={navItemClasses}
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </NavLink>
-            <NavLink
-              to="/scholarships"
-              className={navItemClasses}
-              onClick={() => setMenuOpen(false)}
-            >
-              All Scholarships
-            </NavLink>
-            {isLoggedIn && userRole === "user" && (
-              <NavLink
-                to="/dashboard/user"
-                className={navItemClasses}
-                onClick={() => setMenuOpen(false)}
-              >
-                User Dashboard
-              </NavLink>
-            )}
-            {isLoggedIn && userRole === "admin" && (
-              <NavLink
-                to="/dashboard/admin"
-                className={navItemClasses}
-                onClick={() => setMenuOpen(false)}
-              >
-                Admin Dashboard
-              </NavLink>
-            )}
-            {!isLoggedIn ? (
-              <NavLink
-                to="/login"
-                className={navItemClasses}
-                onClick={() => setMenuOpen(false)}
-              >
-                Login
-              </NavLink>
-            ) : (
-              <button
-                onClick={() => {
-                  console.log("Logout");
-                  setMenuOpen(false);
-                }}
-                className="text-sm px-3 py-2 w-full text-left rounded-md bg-destructive text-white hover:bg-destructive/90"
-              >
-                Logout
-              </button>
-            )}
-            {!isLoggedIn && (
-              <NavLink
-                to="/registration"
-                className={navItemClasses}
-                onClick={() => setMenuOpen(false)}
-              >
-                Registration
-              </NavLink>
-            )}
-            {/* Theme toggle */}
-            <div className="pt-2 pl-3">
-              <ThemeToggle />
-            </div>
-          </div>
-        </>
-      )}
     </header>
   );
 };

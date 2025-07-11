@@ -4,9 +4,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "../providers/AuthContext";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import GoogleLoginButton from "@/components/button/GoogleLoginButton";
 
 const Registration = () => {
   const { handleCreateUser, updateUser } = useContext(AuthContext);
@@ -16,6 +17,10 @@ const Registration = () => {
     formState: { errors },
     reset,
   } = useForm();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.pathname || "/";
 
   const onSubmit = async (data) => {
     const { name, email, password, photoURL } = data;
@@ -30,7 +35,12 @@ const Registration = () => {
       });
 
       toast.success("User created");
+
       reset();
+
+      setTimeout(() => {
+        navigate(from, { replace: true });
+      }, 100);
     } catch (err) {
       toast.error(err.message || "Something went wrong");
     }
@@ -121,10 +131,11 @@ const Registration = () => {
             Login
           </Link>
         </p>
+
+        <GoogleLoginButton></GoogleLoginButton>
       </div>
 
       {/* Toast container */}
-      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
