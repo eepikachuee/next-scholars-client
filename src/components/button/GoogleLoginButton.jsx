@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { AuthContext } from "../../providers/AuthContext";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
+import useSaveUser from "@/hooks/useSaveUser";
 
 const GoogleLoginButton = () => {
   const [loading, setLoading] = useState(false);
   const { handleGoogleSignIn } = useContext(AuthContext);
+  const { saveUser } = useSaveUser();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,7 +18,17 @@ const GoogleLoginButton = () => {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      await handleGoogleSignIn();
+      const result = await handleGoogleSignIn();
+      const user = result.user;
+
+      // Save user to database
+      await saveUser({
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        role: "user",
+      });
+
       toast.success("Logged in with Google");
       navigate(from, { replace: true });
     } catch (error) {

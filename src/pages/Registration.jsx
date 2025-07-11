@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router";
 import GoogleLoginButton from "@/components/button/GoogleLoginButton";
+import useSaveUser from "@/hooks/useSaveUser";
 
 const Registration = () => {
   const { handleCreateUser, updateUser } = useContext(AuthContext);
@@ -17,6 +18,7 @@ const Registration = () => {
     formState: { errors },
     reset,
   } = useForm();
+  const { saveUser } = useSaveUser();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,6 +34,13 @@ const Registration = () => {
       await updateUser({
         displayName: name,
         photoURL,
+      });
+
+      await saveUser({
+        name,
+        email,
+        photoURL,
+        role: "user",
       });
 
       toast.success("User created");
