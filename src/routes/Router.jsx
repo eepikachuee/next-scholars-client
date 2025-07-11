@@ -5,6 +5,7 @@ import Registration from "../pages/Registration";
 import Login from "@/pages/Login";
 import Scholarships from "@/pages/Scholarships";
 import PrivateRoute from "@/providers/PriveteRoute";
+import DashboardLayout from "@/layouts/DashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -32,5 +33,37 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    // children: [
+    //   // User routes
+    //   { path: "user/profile", element: <UserProfile /> },
+    //   { path: "user/applications", element: <MyApplications /> },
+    //   { path: "user/reviews", element: <MyReviews /> },
+
+    //   // Moderator routes
+    //   { path: "moderator/profile", element: <ModeratorProfile /> },
+    //   {
+    //     path: "moderator/manage-scholarships",
+    //     element: <ManageScholarships />,
+    //   },
+    //   { path: "moderator/reviews", element: <AllReviews /> },
+    //   { path: "moderator/applied", element: <AllAppliedScholarships /> },
+    //   { path: "moderator/add-scholarship", element: <AddScholarship /> },
+
+    //   // Admin routes
+    //   { path: "admin/profile", element: <AdminProfile /> },
+    //   { path: "admin/add-scholarship", element: <AddScholarship /> },
+    //   { path: "admin/manage-scholarships", element: <ManageScholarships /> },
+    //   { path: "admin/manage-applications", element: <ManageApplications /> },
+    //   { path: "admin/manage-users", element: <ManageUsers /> },
+    //   { path: "admin/manage-reviews", element: <ManageReviews /> },
+    // ],
   },
 ]);
