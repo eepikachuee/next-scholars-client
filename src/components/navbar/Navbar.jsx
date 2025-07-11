@@ -24,7 +24,7 @@ const Navbar = () => {
       isActive ? "text-primary font-semibold" : "text-muted-foreground"
     }`;
 
-  const role = user?.role || "user";
+  const role = user?.role;
 
   return (
     <header className="w-full px-4 py-3 shadow-sm bg-white dark:bg-gray-900">
@@ -51,6 +51,11 @@ const Navbar = () => {
           {user && role === "admin" && (
             <NavLink to="/dashboard/admin" className={navItemClasses}>
               Admin Dashboard
+            </NavLink>
+          )}
+          {user && role === "moderator" && (
+            <NavLink to="/dashboard/moderator" className={navItemClasses}>
+              Moderator Dashboard
             </NavLink>
           )}
 
@@ -125,6 +130,16 @@ const Navbar = () => {
                     Admin Dashboard
                   </NavLink>
                 )}
+                {user && role === "moderator" && (
+                  <NavLink
+                    to="/dashboard/moderator"
+                    className={navItemClasses}
+                    onClick={() => setOpen(false)}
+                  >
+                    Moderator Dashboard
+                  </NavLink>
+                )}
+
                 {!user ? (
                   <NavLink
                     to="/login"

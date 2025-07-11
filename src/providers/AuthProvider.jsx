@@ -47,14 +47,28 @@ const AuthProvider = ({ children }) => {
 
   //
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/users/${currentUser.email}`
+          );
+          const userInfo = await res.json();
+          setUser({
+            ...currentUser,
+            role: userInfo?.role || "user",
+          });
+        } catch (error) {
+          console.error("Failed to fetch user role", error);
+          setUser({ ...currentUser, role: "user" });
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
-    return () => {
-      unsubscribe();
-    };
+
+    return () => unsubscribe();
   }, []);
 
   console.log(user);
