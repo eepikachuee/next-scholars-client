@@ -45,7 +45,7 @@ const DashboardNavbar = () => {
     <header className="w-full px-4 py-3 shadow-sm bg-white dark:bg-gray-900 md:z-10 md:relative">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <NavLink to="/" className="text-2xl font-bold text-primary">
-          🎓 Dashboard
+          🎓 NextScholars
         </NavLink>
 
         {/* Desktop Nav */}
