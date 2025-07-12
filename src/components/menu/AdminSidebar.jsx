@@ -8,7 +8,7 @@ const navItemClasses = ({ isActive }) =>
 const AdminSidebar = ({ mobile }) => {
   return (
     <div className={`flex flex-col gap-2 ${mobile ? "" : "p-4"}`}>
-      <NavLink to="/dashboard" className={navItemClasses}>
+      <NavLink to="/dashboard/admin" className={navItemClasses}>
         Admin Profile
       </NavLink>
       <NavLink to="/dashboard/admin/add-scholarship" className={navItemClasses}>

@@ -1,4 +1,3 @@
-// src/pages/dashboard/MyProfile.jsx
 import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthContext";
 import { Card, CardContent } from "../../components/ui/card";

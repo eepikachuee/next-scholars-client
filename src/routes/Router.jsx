@@ -7,6 +7,7 @@ import Scholarships from "@/pages/Scholarships";
 import PrivateRoute from "@/providers/PriveteRoute";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import MyProfile from "@/pages/dashboard/MyProfile";
+import AddScholarship from "@/pages/dashboard/Moderator/AddScholarship";
 
 export const router = createBrowserRouter([
   {
@@ -45,7 +46,7 @@ export const router = createBrowserRouter([
     children: [
       // User routes
       {
-        path: "/dashboard",
+        path: "/dashboard/user",
         element: <MyProfile />,
       },
       // { path: "user/applications", element: <MyApplications /> },
@@ -53,7 +54,7 @@ export const router = createBrowserRouter([
 
       // Moderator routes
       {
-        path: "/dashboard",
+        path: "/dashboard/moderator",
         element: <MyProfile />,
       },
       // {
@@ -62,11 +63,11 @@ export const router = createBrowserRouter([
       // },
       // { path: "moderator/reviews", element: <AllReviews /> },
       // { path: "moderator/applied", element: <AllAppliedScholarships /> },
-      // { path: "moderator/add-scholarship", element: <AddScholarship /> },
+      { path: "moderator/add-scholarship", element: <AddScholarship /> },
 
       // Admin routes
       {
-        path: "/dashboard",
+        path: "/dashboard/admin",
         element: <MyProfile />,
       },
       // { path: "admin/add-scholarship", element: <AddScholarship /> },

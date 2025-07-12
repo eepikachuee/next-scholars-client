@@ -44,17 +44,17 @@ const Navbar = () => {
           </NavLink>
 
           {user && role === "user" && (
-            <NavLink to="/dashboard" className={navItemClasses}>
+            <NavLink to="/dashboard/user" className={navItemClasses}>
               User Dashboard
             </NavLink>
           )}
           {user && role === "admin" && (
-            <NavLink to="/dashboard" className={navItemClasses}>
+            <NavLink to="/dashboard/admin" className={navItemClasses}>
               Admin Dashboard
             </NavLink>
           )}
           {user && role === "moderator" && (
-            <NavLink to="/dashboard" className={navItemClasses}>
+            <NavLink to="/dashboard/moderator" className={navItemClasses}>
               Moderator Dashboard
             </NavLink>
           )}
@@ -114,7 +114,7 @@ const Navbar = () => {
                 </NavLink>
                 {user && role === "user" && (
                   <NavLink
-                    to="/dashboard"
+                    to="/dashboard/user"
                     className={navItemClasses}
                     onClick={() => setOpen(false)}
                   >
@@ -123,7 +123,7 @@ const Navbar = () => {
                 )}
                 {user && role === "admin" && (
                   <NavLink
-                    to="/dashboard"
+                    to="/dashboard/admin"
                     className={navItemClasses}
                     onClick={() => setOpen(false)}
                   >
@@ -132,7 +132,7 @@ const Navbar = () => {
                 )}
                 {user && role === "moderator" && (
                   <NavLink
-                    to="/dashboard"
+                    to="/dashboard/moderator"
                     className={navItemClasses}
                     onClick={() => setOpen(false)}
                   >
