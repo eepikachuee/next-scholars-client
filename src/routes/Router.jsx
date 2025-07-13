@@ -10,6 +10,7 @@ import MyProfile from "@/pages/dashboard/MyProfile";
 import AddScholarship from "@/pages/dashboard/Moderator/AddScholarship";
 import ManageScholarships from "@/pages/dashboard/Moderator/ManageScholarships";
 import ScholarshipDetails from "@/pages/ScholarshipDetails";
+import CheckoutPage from "@/pages/CheckoutPage";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <ScholarshipDetails />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/checkout/:id",
+        element: (
+          <PrivateRoute>
+            <CheckoutPage></CheckoutPage>
           </PrivateRoute>
         ),
       },
