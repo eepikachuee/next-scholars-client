@@ -9,6 +9,7 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import MyProfile from "@/pages/dashboard/MyProfile";
 import AddScholarship from "@/pages/dashboard/Moderator/AddScholarship";
 import ManageScholarships from "@/pages/dashboard/Moderator/ManageScholarships";
+import ScholarshipDetails from "@/pages/ScholarshipDetails";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Scholarships />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/scholarships/:id",
+        element: (
+          <PrivateRoute>
+            <ScholarshipDetails />
           </PrivateRoute>
         ),
       },
