@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import uploadImageToImgbb from "@/utils/uploadImageToImgbb";
+import { PulseLoader } from "react-spinners";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
@@ -26,8 +27,15 @@ const CheckoutPage = () => {
   const [scholarship, setScholarship] = useState(null);
   const { id } = useParams();
   const [applicationData, setApplicationData] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
-  const { register, handleSubmit, control, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     if (id) {
@@ -39,6 +47,8 @@ const CheckoutPage = () => {
 
   const onSubmit = async (data) => {
     try {
+      setUploading(true);
+
       const imageFile = data.photo[0];
       if (!imageFile) {
         toast.error("Please upload a photo.");
@@ -50,7 +60,7 @@ const CheckoutPage = () => {
         return;
       }
 
-      const imageUrl = await uploadImageToImgbb(imageFile); // ✅ fixed this
+      const imageUrl = await uploadImageToImgbb(imageFile); // fixed this
 
       const application = {
         ...data,
@@ -60,16 +70,20 @@ const CheckoutPage = () => {
         userId: user._id,
         scholarshipId: id,
         applyDate: new Date(),
+        applicationStatus: "pending",
         universityName: scholarship.universityName,
         scholarshipCategory: scholarship.scholarshipCategory,
         subjectCategory: scholarship.subjectCategory,
+        postedBy: scholarship.postedBy,
       };
 
       setApplicationData(application);
       toast.success("Application data ready, please complete payment.");
     } catch (error) {
-      console.error("Application error:", error); // ✅ log the real error
+      console.error("Application error:", error); //log the real error
       toast.error("Something went wrong preparing application.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -85,77 +99,170 @@ const CheckoutPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="grid gap-4 bg-muted p-6 rounded-xl shadow-md"
       >
-        <Input
-          {...register("phone", { required: true })}
-          placeholder="Phone Number"
-        />
-        <Input type="file" {...register("photo", { required: true })} />
-        <Input
-          {...register("address", { required: true })}
-          placeholder="Address"
-        />
-
-        <Controller
-          name="gender"
-          control={control}
-          defaultValue=""
-          rules={{ required: true }}
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Male">Male</SelectItem>
-                <SelectItem value="Female">Female</SelectItem>
-                <SelectItem value="Other">Other</SelectItem>
-              </SelectContent>
-            </Select>
+        {/* Phone Number */}
+        <div>
+          <label className="block mb-1 text-sm font-medium text-gray-700">
+            Phone Number
+          </label>
+          <Input
+            {...register("phone", { required: "Phone number is required" })}
+            placeholder="Enter your phone number"
+            className="w-full"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
           )}
-        />
+        </div>
 
-        <Controller
-          name="degree"
-          control={control}
-          defaultValue=""
-          rules={{ required: true }}
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue placeholder="Applying Degree" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Diploma">Diploma</SelectItem>
-                <SelectItem value="Bachelor">Bachelor</SelectItem>
-                <SelectItem value="Masters">Masters</SelectItem>
-              </SelectContent>
-            </Select>
+        {/* Photo Upload */}
+        <div>
+          <label className="block mb-1 text-sm font-medium text-gray-700">
+            Upload Your Photo
+          </label>
+          <Input
+            type="file"
+            {...register("photo", { required: "Photo is required" })}
+            className="w-full"
+          />
+          {errors.photo && (
+            <p className="text-red-500 text-sm mt-1">{errors.photo.message}</p>
           )}
-        />
+        </div>
 
-        <Input {...register("ssc", { required: true })} placeholder="SSC GPA" />
-        <Input {...register("hsc", { required: true })} placeholder="HSC GPA" />
-
-        {/* Study Gap Dropdown (optional) */}
-        <Controller
-          name="studyGap"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue placeholder="Study Gap (optional)" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1 year">1 year</SelectItem>
-                <SelectItem value="2 years">2 years</SelectItem>
-                <SelectItem value="3+ years">3+ years</SelectItem>
-              </SelectContent>
-            </Select>
+        {/* Address */}
+        <div>
+          <label className="block mb-1 text-sm font-medium text-gray-700">
+            Address
+          </label>
+          <Input
+            {...register("address", { required: "Address is required" })}
+            placeholder="Enter your address"
+            className="w-full"
+          />
+          {errors.address && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.address.message}
+            </p>
           )}
-        />
+        </div>
 
-        {/* Read-only fields styled properly */}
+        {/* Gender, Degree, Study Gap */}
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Gender */}
+          <div className="w-full md:w-1/3">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Gender
+            </label>
+            <Controller
+              name="gender"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Gender is required" }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.gender && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.gender.message}
+              </p>
+            )}
+          </div>
+
+          {/* Degree */}
+          <div className="w-full md:w-1/3">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Applying Degree
+            </label>
+            <Controller
+              name="degree"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Degree is required" }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Degree" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Diploma">Diploma</SelectItem>
+                    <SelectItem value="Bachelor">Bachelor</SelectItem>
+                    <SelectItem value="Masters">Masters</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.degree && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.degree.message}
+              </p>
+            )}
+          </div>
+
+          {/* Study Gap */}
+          <div className="w-full md:w-1/3">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Study Gap (optional)
+            </label>
+            <Controller
+              name="studyGap"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Study Gap" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1 year">1 year</SelectItem>
+                    <SelectItem value="2 years">2 years</SelectItem>
+                    <SelectItem value="3+ years">3+ years</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </div>
+
+        {/* SSC & HSC GPA */}
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-1/2">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              SSC GPA
+            </label>
+            <Input
+              {...register("ssc", { required: "SSC GPA is required" })}
+              className="w-full"
+            />
+            {errors.ssc && (
+              <p className="text-red-500 text-sm mt-1">{errors.ssc.message}</p>
+            )}
+          </div>
+
+          <div className="w-full md:w-1/2">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              HSC GPA
+            </label>
+            <Input
+              {...register("hsc", { required: "HSC GPA is required" })}
+              className="w-full"
+            />
+            {errors.hsc && (
+              <p className="text-red-500 text-sm mt-1">{errors.hsc.message}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Read-only Scholarship Info */}
         {scholarship && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -179,7 +286,16 @@ const CheckoutPage = () => {
           </div>
         )}
 
-        <Button type="submit">Submit Application Data</Button>
+        {/* Submit Button */}
+        <div className="pt-2">
+          <Button type="submit" disabled={uploading} className="w-full">
+            {uploading ? (
+              <PulseLoader color="#ffffff" size={10} />
+            ) : (
+              "Submit Application Data"
+            )}
+          </Button>
+        </div>
       </form>
 
       <div className="mt-10">

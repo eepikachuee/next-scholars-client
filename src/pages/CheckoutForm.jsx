@@ -2,14 +2,18 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useState } from "react";
+import { PulseLoader } from "react-spinners";
 
 const CheckoutForm = ({ scholarship, applicationData, onSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
   const axiosPublic = useAxiosPublic();
+  const [uploading, setUploading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setUploading(true);
 
     if (!stripe || !elements) return;
 
@@ -35,6 +39,7 @@ const CheckoutForm = ({ scholarship, applicationData, onSuccess }) => {
 
     if (confirmRes.error) {
       toast.error("Payment failed");
+      setUploading(false);
     } else if (confirmRes.paymentIntent.status === "succeeded") {
       try {
         await axiosPublic.post("/appliedScholarships", applicationData);
@@ -42,6 +47,8 @@ const CheckoutForm = ({ scholarship, applicationData, onSuccess }) => {
         if (onSuccess) onSuccess();
       } catch (err) {
         toast.error("Payment succeeded but failed to save application.", err);
+      } finally {
+        setUploading(false);
       }
     }
   };
@@ -51,10 +58,14 @@ const CheckoutForm = ({ scholarship, applicationData, onSuccess }) => {
       <CardElement />
       <Button
         type="submit"
-        disabled={!stripe || !applicationData}
+        disabled={!stripe || !applicationData || uploading}
         className="mt-4"
       >
-        Pay ${scholarship.applicationFees} and Apply
+        {uploading ? (
+          <PulseLoader color="#ffffff" size={10} />
+        ) : (
+          `Pay ${scholarship.applicationFees} and Apply`
+        )}
       </Button>
     </form>
   );
