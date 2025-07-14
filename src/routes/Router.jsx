@@ -11,6 +11,7 @@ import AddScholarship from "@/pages/dashboard/Moderator/AddScholarship";
 import ManageScholarships from "@/pages/dashboard/Moderator/ManageScholarships";
 import ScholarshipDetails from "@/pages/ScholarshipDetails";
 import CheckoutPage from "@/pages/CheckoutPage";
+import MyApplications from "@/pages/dashboard/user/MyApplications";
 
 export const router = createBrowserRouter([
   {
@@ -68,7 +69,10 @@ export const router = createBrowserRouter([
         path: "/dashboard/user",
         element: <MyProfile />,
       },
-      // { path: "user/applications", element: <MyApplications /> },
+      {
+        path: "user/applications",
+        element: <MyApplications />,
+      },
       // { path: "user/reviews", element: <MyReviews /> },
 
       // Moderator routes
