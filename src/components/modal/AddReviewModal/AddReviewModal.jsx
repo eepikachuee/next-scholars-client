@@ -30,6 +30,8 @@ const AddReviewModal = ({ open, onClose, scholarship }) => {
     formState: { errors },
   } = useForm();
 
+  console.log(scholarship);
+
   const onSubmit = async (data) => {
     const reviewData = {
       ...data,
@@ -37,7 +39,8 @@ const AddReviewModal = ({ open, onClose, scholarship }) => {
       reviewDate: new Date(),
       scholarshipName: scholarship.scholarshipName,
       universityName: scholarship.universityName,
-      universityId: scholarship._id,
+      applicationId: scholarship._id,
+      scholarshipId: scholarship.scholarshipId,
       userName: user.displayName,
       userEmail: user.email,
       userImage: user.photoURL,
