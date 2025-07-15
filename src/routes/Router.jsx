@@ -13,6 +13,8 @@ import ScholarshipDetails from "@/pages/ScholarshipDetails";
 import CheckoutPage from "@/pages/CheckoutPage";
 import MyApplications from "@/pages/dashboard/user/MyApplications";
 import MyReviews from "@/pages/dashboard/user/MyReviews";
+import AllReviews from "@/pages/dashboard/Moderator/AllReviews";
+import AllAppliedScholarships from "@/pages/dashboard/Moderator/AllAppliedScholarships";
 
 export const router = createBrowserRouter([
   {
@@ -88,9 +90,18 @@ export const router = createBrowserRouter([
         path: "moderator/manage-scholarships",
         element: <ManageScholarships />,
       },
-      // { path: "moderator/reviews", element: <AllReviews /> },
-      // { path: "moderator/applied", element: <AllAppliedScholarships /> },
-      { path: "moderator/add-scholarship", element: <AddScholarship /> },
+      {
+        path: "moderator/reviews",
+        element: <AllReviews />,
+      },
+      {
+        path: "moderator/applied",
+        element: <AllAppliedScholarships />,
+      },
+      {
+        path: "moderator/add-scholarship",
+        element: <AddScholarship />,
+      },
 
       // Admin routes
       {
