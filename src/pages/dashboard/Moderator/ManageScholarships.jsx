@@ -35,7 +35,7 @@ const ManageScholarships = () => {
     enabled: !!user?.email,
     queryKey: ["scholarships", user?.email],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/scholarships/${user.email}`);
+      const res = await axiosPublic.get(`/scholarships`);
       // console.log("Fetching scholarships for:", user?.email);
       return res.data;
     },

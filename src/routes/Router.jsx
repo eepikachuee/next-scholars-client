@@ -15,6 +15,7 @@ import MyApplications from "@/pages/dashboard/user/MyApplications";
 import MyReviews from "@/pages/dashboard/user/MyReviews";
 import AllReviews from "@/pages/dashboard/Moderator/AllReviews";
 import AllAppliedScholarships from "@/pages/dashboard/Moderator/AllAppliedScholarships";
+import AdminManageUsers from "@/pages/dashboard/Admin/AdminManageUsers";
 
 export const router = createBrowserRouter([
   {
@@ -108,11 +109,23 @@ export const router = createBrowserRouter([
         path: "/dashboard/admin",
         element: <MyProfile />,
       },
-      // { path: "admin/add-scholarship", element: <AddScholarship /> },
-      // { path: "admin/manage-scholarships", element: <ManageScholarships /> },
-      // { path: "admin/manage-applications", element: <ManageApplications /> },
-      // { path: "admin/manage-users", element: <ManageUsers /> },
-      // { path: "admin/manage-reviews", element: <ManageReviews /> },
+      {
+        path: "admin/add-scholarship",
+        element: <AddScholarship />,
+      },
+      {
+        path: "admin/manage-scholarships",
+        element: <ManageScholarships />,
+      },
+      {
+        path: "admin/manage-applications",
+        element: <AllAppliedScholarships />,
+      },
+      { path: "admin/manage-users", element: <AdminManageUsers /> },
+      {
+        path: "admin/manage-reviews",
+        element: <AllReviews />,
+      },
     ],
   },
 ]);
