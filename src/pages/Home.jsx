@@ -1,9 +1,10 @@
+import TopScholarships from "@/components/home/TopScholarships";
 import React from "react";
 
 const Home = () => {
   return (
     <div>
-      <h4>This is Home Page</h4>
+      <TopScholarships />
     </div>
   );
 };
