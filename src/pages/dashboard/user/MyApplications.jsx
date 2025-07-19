@@ -8,10 +8,12 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import EditApplicationModal from "@/components/modal/EditApplicationModal/EditApplicationModal";
 import AddReviewModal from "@/components/modal/AddReviewModal/AddReviewModal";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const MyApplications = () => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
 
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,7 +42,7 @@ const MyApplications = () => {
   } = useQuery({
     queryKey: ["myApplications", user?.email],
     queryFn: async () => {
-      const res = await axiosPublic.get(
+      const res = await axiosSecure.get(
         `/appliedScholarships/user/${user?.email}`
       );
       // console.log(res.data);

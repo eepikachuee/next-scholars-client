@@ -3,14 +3,16 @@ import Swal from "sweetalert2";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const AllReviews = () => {
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [reviews, setReviews] = useState([]);
 
   const fetchReviews = async () => {
     try {
-      const res = await axiosPublic.get("/reviews");
+      const res = await axiosSecure.get("/reviews");
       setReviews(res.data);
     } catch (error) {
       console.error("Error loading reviews", error);

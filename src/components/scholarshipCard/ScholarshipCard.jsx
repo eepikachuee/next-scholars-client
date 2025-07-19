@@ -30,7 +30,7 @@ const ScholarshipCard = ({ data }) => {
     enabled: !!_id, // ensures the query only runs if _id is available
   });
 
-  console.log(reviews);
+  // console.log(reviews);
 
   if (isLoading) return <p className="text-center py-10">Loading...</p>;
 

@@ -8,11 +8,12 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
+// import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useState } from "react";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const AdminManageUsers = () => {
-  const axiosSecure = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [filterRole, setFilterRole] = useState("all");
 

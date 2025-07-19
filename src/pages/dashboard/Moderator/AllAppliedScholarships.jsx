@@ -10,10 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import Swal from "sweetalert2";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const AllAppliedScholarships = () => {
-  const axiosSecure = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [applications, setApplications] = useState([]);
   const [selectedApp, setSelectedApp] = useState(null);
   const [feedbackModal, setFeedbackModal] = useState(false);

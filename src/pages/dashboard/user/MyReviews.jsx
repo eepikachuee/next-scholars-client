@@ -1,20 +1,19 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "@/providers/AuthContext";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import EditReviewModal from "@/components/modal/EditReviewModal";
-// import EditReviewModal from "./EditReviewModal";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const MyReviews = () => {
   const { user } = useContext(AuthContext);
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchReviews = async () => {
     try {
-      const res = await axiosPublic.get(`/reviews/user/${user.email}`);
+      const res = await axiosSecure.get(`/reviews/user/${user.email}`);
       setReviews(res.data);
     } catch (error) {
       console.error("Error fetching reviews", error);
@@ -38,7 +37,7 @@ const MyReviews = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axiosPublic.delete(`/reviews/${id}`);
+        await axiosSecure.delete(`/reviews/${id}`);
         Swal.fire("Deleted!", "Your review has been deleted.", "success");
         fetchReviews(); // refresh table
       } catch {

@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { toast } from "react-toastify";
 import { useParams } from "react-router";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
@@ -18,12 +17,13 @@ import {
 } from "@/components/ui/select";
 import uploadImageToImgbb from "@/utils/uploadImageToImgbb";
 import { PulseLoader } from "react-spinners";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 const CheckoutPage = () => {
   const { user } = useContext(AuthContext);
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [scholarship, setScholarship] = useState(null);
   const { id } = useParams();
   const [applicationData, setApplicationData] = useState(null);
@@ -39,11 +39,11 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (id) {
-      axiosPublic.get(`/scholarships/details/${id}`).then((res) => {
+      axiosSecure.get(`/scholarships/details/${id}`).then((res) => {
         setScholarship(res.data);
       });
     }
-  }, [id, axiosPublic]);
+  }, [id, axiosSecure]);
 
   const onSubmit = async (data) => {
     try {

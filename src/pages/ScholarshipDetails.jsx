@@ -4,11 +4,12 @@ import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
 
   const {
     data: scholarship,
@@ -17,7 +18,7 @@ const ScholarshipDetails = () => {
   } = useQuery({
     queryKey: ["scholarship", id],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/scholarships/details/${id}`);
+      const res = await axiosSecure.get(`/scholarships/details/${id}`);
       return res.data;
     },
     enabled: !!id,

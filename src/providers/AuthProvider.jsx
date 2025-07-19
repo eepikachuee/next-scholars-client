@@ -10,6 +10,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import axios from "axios";
 
 const provider = new GoogleAuthProvider();
 
@@ -42,6 +43,7 @@ const AuthProvider = ({ children }) => {
 
   //
   const handleSignOutUser = () => {
+    localStorage.removeItem("token");
     return signOut(auth);
   };
 
@@ -65,6 +67,20 @@ const AuthProvider = ({ children }) => {
       } else {
         setUser(null);
       }
+
+      if (currentUser?.email) {
+        axios
+          .post(`${import.meta.env.VITE_API_URL}/jwt`, {
+            email: currentUser?.email,
+          })
+          .then((res) => {
+            // to store token in localstorage method only
+            localStorage.setItem("token", res.data.token);
+          });
+      } else {
+        localStorage.removeItem("token");
+      }
+
       setLoading(false);
     });
 

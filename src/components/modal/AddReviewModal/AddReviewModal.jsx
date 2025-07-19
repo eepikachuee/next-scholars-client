@@ -30,7 +30,7 @@ const AddReviewModal = ({ open, onClose, scholarship }) => {
     formState: { errors },
   } = useForm();
 
-  console.log(scholarship);
+  // console.log(scholarship);
 
   const onSubmit = async (data) => {
     const reviewData = {
