@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
-// import ScholarshipCard from "@/components/shared/ScholarshipCard";
 import { Button } from "@/components/ui/button";
 import ScholarshipCard from "../scholarshipCard/ScholarshipCard";
 

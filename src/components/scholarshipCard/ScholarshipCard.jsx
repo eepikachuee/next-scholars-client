@@ -2,9 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const ScholarshipCard = ({ data }) => {
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const {
     universityName,
@@ -15,9 +18,21 @@ const ScholarshipCard = ({ data }) => {
     deadline,
     subjectCategory,
     applicationFees,
-    rating,
     _id,
   } = data;
+
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ["reviews-by-scholarship", _id],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/reviews/${_id}`);
+      return res.data;
+    },
+    enabled: !!_id, // ensures the query only runs if _id is available
+  });
+
+  console.log(reviews);
+
+  if (isLoading) return <p className="text-center py-10">Loading...</p>;
 
   return (
     <motion.div
@@ -51,7 +66,7 @@ const ScholarshipCard = ({ data }) => {
             <strong>Application Fees:</strong> ${applicationFees}
           </p>
           <p>
-            <strong>Rating:</strong> ⭐ {rating || "N/A"}
+            <strong>Rating:</strong> ⭐ {reviews || "N/A"}
           </p>
           <Button
             variant="outline"

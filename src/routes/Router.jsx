@@ -16,6 +16,8 @@ import MyReviews from "@/pages/dashboard/user/MyReviews";
 import AllReviews from "@/pages/dashboard/Moderator/AllReviews";
 import AllAppliedScholarships from "@/pages/dashboard/Moderator/AllAppliedScholarships";
 import AdminManageUsers from "@/pages/dashboard/Admin/AdminManageUsers";
+import AdminRoute from "./AdminRoute";
+import ModeratorRoute from "./ModeratorRoute";
 
 export const router = createBrowserRouter([
   {
@@ -71,60 +73,141 @@ export const router = createBrowserRouter([
       // User routes
       {
         path: "/dashboard/user",
-        element: <MyProfile />,
+        element: (
+          <PrivateRoute>
+            <MyProfile />
+          </PrivateRoute>
+        ),
       },
       {
         path: "user/applications",
-        element: <MyApplications />,
+        element: (
+          <PrivateRoute>
+            <MyApplications />
+          </PrivateRoute>
+        ),
       },
       {
         path: "user/reviews",
-        element: <MyReviews />,
+        element: (
+          <PrivateRoute>
+            <MyReviews />
+          </PrivateRoute>
+        ),
       },
 
       // Moderator routes
       {
         path: "/dashboard/moderator",
-        element: <MyProfile />,
+        element: (
+          <PrivateRoute>
+            <ModeratorRoute>
+              <MyProfile />
+            </ModeratorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "moderator/manage-scholarships",
-        element: <ManageScholarships />,
+        element: (
+          <PrivateRoute>
+            <ModeratorRoute>
+              <ManageScholarships />
+            </ModeratorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "moderator/reviews",
-        element: <AllReviews />,
+        element: (
+          <PrivateRoute>
+            <ModeratorRoute>
+              <AllReviews />
+            </ModeratorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "moderator/applied",
-        element: <AllAppliedScholarships />,
+        element: (
+          <PrivateRoute>
+            <ModeratorRoute>
+              <AllAppliedScholarships />
+            </ModeratorRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "moderator/add-scholarship",
-        element: <AddScholarship />,
+        element: (
+          <PrivateRoute>
+            <ModeratorRoute>
+              <AddScholarship />
+            </ModeratorRoute>
+          </PrivateRoute>
+        ),
       },
 
       // Admin routes
       {
         path: "/dashboard/admin",
-        element: <MyProfile />,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <MyProfile />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "admin/add-scholarship",
-        element: <AddScholarship />,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AddScholarship />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "admin/manage-scholarships",
-        element: <ManageScholarships />,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <ManageScholarships />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
       {
         path: "admin/manage-applications",
-        element: <AllAppliedScholarships />,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AllAppliedScholarships />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
-      { path: "admin/manage-users", element: <AdminManageUsers /> },
+      {
+        path: "admin/manage-users",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AdminManageUsers />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
       {
         path: "admin/manage-reviews",
-        element: <AllReviews />,
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AllReviews />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
       },
     ],
   },
