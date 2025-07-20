@@ -9,6 +9,9 @@ const UserSidebar = ({ mobile }) => {
   return (
     <div className={`flex flex-col gap-2 ${mobile ? "" : "p-4"}`}>
       <NavLink to="/dashboard/user" className={navItemClasses}>
+        Dashboard
+      </NavLink>
+      <NavLink to="/dashboard/user/myProfile" className={navItemClasses}>
         My Profile
       </NavLink>
       <NavLink to="/dashboard/user/applications" className={navItemClasses}>

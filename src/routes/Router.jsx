@@ -18,6 +18,7 @@ import AllAppliedScholarships from "@/pages/dashboard/Moderator/AllAppliedSchola
 import AdminManageUsers from "@/pages/dashboard/Admin/AdminManageUsers";
 import AdminRoute from "./AdminRoute";
 import ModeratorRoute from "./ModeratorRoute";
+import AnalyticsDashboard from "@/pages/dashboard/AnalyticsDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -63,16 +64,18 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
+    path: "dashboard",
     element: (
       <PrivateRoute>
         <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
+      { path: "user", element: <AnalyticsDashboard /> },
+
       // User routes
       {
-        path: "/dashboard/user",
+        path: "user/myProfile",
         element: (
           <PrivateRoute>
             <MyProfile />
@@ -97,8 +100,9 @@ export const router = createBrowserRouter([
       },
 
       // Moderator routes
+      // { path: "moderator", element: <AnalyticsDashboard /> },
       {
-        path: "/dashboard/moderator",
+        path: "moderator/myProfile",
         element: (
           <PrivateRoute>
             <ModeratorRoute>
@@ -149,8 +153,9 @@ export const router = createBrowserRouter([
       },
 
       // Admin routes
+      // { path: "admin", element: <AnalyticsDashboard /> },
       {
-        path: "/dashboard/admin",
+        path: "admin/myProfile",
         element: (
           <PrivateRoute>
             <AdminRoute>
