@@ -31,7 +31,7 @@ const TopScholarships = () => {
     .slice(0, 6);
 
   return (
-    <section className="my-12 px-4 max-w-7xl mx-auto mt-32">
+    <section className="my-16 px-4 max-w-7xl mx-auto mt-32">
       <h2 className="text-3xl font-semibold mb-10 text-center">
         Top Scholarships
       </h2>
