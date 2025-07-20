@@ -1,15 +1,19 @@
 import { useParams, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
+// import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useEffect, useState } from "react";
+import useAxiosPublic from "@/hooks/useAxiosPublic";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
+  const [reviews, setReviews] = useState([]);
 
   const {
     data: scholarship,
@@ -24,6 +28,21 @@ const ScholarshipDetails = () => {
     enabled: !!id,
   });
 
+  useEffect(() => {
+    const getReviews = async () => {
+      try {
+        const res = await axiosPublic.get(`/scholarship-reviews/${id}`);
+        setReviews(res.data);
+      } catch (error) {
+        console.error("Error fetching reviews", error);
+      }
+    };
+
+    getReviews();
+  }, [axiosPublic, id]);
+
+  // console.log(reviews);
+
   if (isLoading) {
     return <Skeleton className="w-full h-96 rounded-xl" />;
   }
@@ -33,7 +52,7 @@ const ScholarshipDetails = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
+    <div className="max-w-7xl mx-auto px-4 py-10">
       <Card className="rounded-2xl shadow-xl overflow-hidden">
         <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -87,14 +106,46 @@ const ScholarshipDetails = () => {
             </Button>
           </div>
         </CardContent>
-
-        {/* <div className="p-6 border-t text-sm text-muted-foreground">
-          <h3 className="text-lg font-semibold mb-2">
-            Scholarship Description
-          </h3>
-          <p>{scholarship.description || "No description provided."}</p>
-        </div> */}
       </Card>
+
+      <h4 className="font-bold text-3xl pt-10">Review</h4>
+
+      <div className="grid grid-cols-3 gap-5 pt-5">
+        {reviews.length ? (
+          reviews.map((review) => (
+            <Card key={review._id} className="shadow-md p-4 flex flex-col">
+              <CardContent>
+                <h3 className="text-lg font-semibold mb-1">
+                  🎓 {review.universityName}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-1">
+                  Subject:{" "}
+                  <span className="font-medium">{review.subjectCategory}</span>
+                </p>
+                <div className="flex items-center gap-3 mt-2 mb-2">
+                  <img
+                    src={review.userImage}
+                    alt="Reviewer"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold">{review.userName}</p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(review.reviewDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-yellow-500 font-semibold">
+                  ⭐ {review.rating}
+                </p>
+                <p className="mt-2 italic text-gray-800">{review.comment}</p>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <p>No review available</p>
+        )}
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { motion } from "framer-motion";
 import ScholarshipCard from "../components/scholarshipCard/ScholarshipCard";
+import Loading from "@/components/loading/Loading";
 
 const Scholarships = () => {
   const axiosPublic = useAxiosPublic();
@@ -36,7 +37,7 @@ const Scholarships = () => {
   const scholarships = data.scholarships || [];
   // const totalPages = data.totalPages || 1;
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
   if (isError) return <p>Error loading scholarships</p>;
 
   if (!Array.isArray(scholarships)) {
@@ -59,7 +60,7 @@ const Scholarships = () => {
       </form>
 
       {isLoading ? (
-        <p className="text-center">Loading...</p>
+        <Loading></Loading>
       ) : isError ? (
         <p className="text-center text-red-500">Failed to load scholarships</p>
       ) : scholarships.length === 0 ? (

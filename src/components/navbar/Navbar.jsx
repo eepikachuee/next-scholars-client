@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { Menu } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../providers/AuthContext";
 import { Button } from "@/components/ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -26,8 +26,29 @@ const Navbar = () => {
 
   const role = user?.role;
 
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (window.scrollY > lastScrollY) {
+        setShowNavbar(false); // scrolling down
+      } else {
+        setShowNavbar(true); // scrolling up
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", controlNavbar);
+    return () => window.removeEventListener("scroll", controlNavbar);
+  }, [lastScrollY]);
+
   return (
-    <header className="w-full px-4 py-3 shadow-sm bg-white dark:bg-gray-900">
+    <header
+      className={`w-full fixed top-0 left-0 z-50 px-4 py-3 transition-all duration-300
+        ${showNavbar ? "translate-y-0" : "-translate-y-full"}
+        backdrop-blur-md bg-white/50 dark:bg-[#0f0f0f]/50 shadow-sm`}
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <NavLink to="/" className="text-2xl font-bold text-primary">
@@ -59,14 +80,10 @@ const Navbar = () => {
             </NavLink>
           )}
 
-          {!user ? (
+          {!user && (
             <NavLink to="/login" className={navItemClasses}>
               Login
             </NavLink>
-          ) : (
-            <Button size="sm" variant="destructive" onClick={handleSignOutUser}>
-              Logout
-            </Button>
           )}
           {!user && (
             <NavLink
@@ -77,11 +94,75 @@ const Navbar = () => {
               Register
             </NavLink>
           )}
+          {user && (
+            <div className="relative group pr-3">
+              {/* Avatar Button */}
+              <button className="rounded-full border-2 border-transparent hover:border-amber-600 focus:outline-none transition">
+                <img
+                  src={user.photoURL}
+                  alt="User avatar"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 text-gray-800 dark:text-white 
+                 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                 transition-all duration-300 z-50 p-4 space-y-2"
+              >
+                <p className="text-sm font-semibold">{user.displayName}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 break-all">
+                  {user.email}
+                </p>
+                <hr className="border-gray-200 dark:border-gray-700" />
+                <button
+                  onClick={handleSignOutUser}
+                  className="w-full text-center text-red-600 hover:underline text-sm"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+
           <ThemeToggle />
         </nav>
 
         {/* Mobile Drawer Trigger */}
-        <div className="md:hidden">
+        <div className="md:hidden flex">
+          {user && (
+            <div className="relative group pr-3">
+              {/* Avatar Button */}
+              <button className="rounded-full border-2 border-transparent hover:border-amber-600 focus:outline-none transition">
+                <img
+                  src={user.photoURL}
+                  alt="User avatar"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 text-gray-800 dark:text-white 
+                 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                 transition-all duration-300 z-50 p-4 space-y-2"
+              >
+                <p className="text-sm font-semibold">{user.displayName}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 break-all">
+                  {user.email}
+                </p>
+                <hr className="border-gray-200 dark:border-gray-700" />
+                <button
+                  onClick={handleSignOutUser}
+                  className="w-full text-center text-red-600 hover:underline text-sm"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Open menu">
@@ -94,7 +175,9 @@ const Navbar = () => {
                 <SheetTitle asChild>
                   <VisuallyHidden>Navigation Menu</VisuallyHidden>
                 </SheetTitle>
-                <SheetDescription>Menu</SheetDescription>
+                <SheetDescription className={"font-bold text-2xl"}>
+                  Menu
+                </SheetDescription>
               </SheetHeader>
 
               <div className="flex flex-col gap-3 mt-6">
@@ -140,7 +223,7 @@ const Navbar = () => {
                   </NavLink>
                 )}
 
-                {!user ? (
+                {!user && (
                   <NavLink
                     to="/login"
                     className={navItemClasses}
@@ -148,17 +231,6 @@ const Navbar = () => {
                   >
                     Login
                   </NavLink>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => {
-                      handleSignOutUser();
-                      setOpen(false);
-                    }}
-                  >
-                    Logout
-                  </Button>
                 )}
                 {!user && (
                   <NavLink
@@ -171,7 +243,9 @@ const Navbar = () => {
                 )}
 
                 {/* Optional: Add close on toggle as well if needed */}
-                <ThemeToggle />
+                <div className="pl-3">
+                  <ThemeToggle />
+                </div>
               </div>
             </SheetContent>
           </Sheet>

@@ -26,13 +26,13 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen">
       {/* Mobile Navbar */}
       <DashboardNavbar />
 
       <div className="flex max-w-7xl mx-auto">
         {/* Sidebar for desktop only */}
-        <aside className="hidden md:block w-64 bg-white dark:bg-gray-800 border-r min-h-screen">
+        <aside className="hidden md:block w-64 bg-[#f8f4ee] dark:bg-[#2a2524] border-r min-h-screen">
           {renderSidebar()}
         </aside>
 

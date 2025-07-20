@@ -42,7 +42,7 @@ const DashboardNavbar = () => {
     }`;
 
   return (
-    <header className="w-full px-4 py-3 shadow-sm bg-white dark:bg-gray-900 md:z-10 md:relative">
+    <header className="w-full px-4 py-3 shadow-sm md:z-10 md:relative">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <NavLink to="/" className="text-2xl font-bold text-primary">
           🎓 NextScholars
@@ -71,14 +71,74 @@ const DashboardNavbar = () => {
               Admin Dashboard
             </NavLink>
           )}
+          {user && (
+            <div className="relative group pr-3">
+              {/* Avatar Button */}
+              <button className="rounded-full border-2 border-transparent hover:border-amber-600 focus:outline-none transition">
+                <img
+                  src={user.photoURL}
+                  alt="User avatar"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 text-gray-800 dark:text-white 
+                 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                 transition-all duration-300 z-50 p-4 space-y-2"
+              >
+                <p className="text-sm font-semibold">{user.displayName}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 break-all">
+                  {user.email}
+                </p>
+                <hr className="border-gray-200 dark:border-gray-700" />
+                <button
+                  onClick={handleSignOutUser}
+                  className="w-full text-center text-red-600 hover:underline text-sm"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
           <ThemeToggle />
-          <Button size="sm" variant="destructive" onClick={handleSignOutUser}>
-            Logout
-          </Button>
         </nav>
 
         {/* Mobile Drawer */}
-        <div className="md:hidden">
+        <div className="md:hidden flex">
+          {user && (
+            <div className="relative group pr-3">
+              {/* Avatar Button */}
+              <button className="rounded-full border-2 border-transparent hover:border-amber-600 focus:outline-none transition">
+                <img
+                  src={user.photoURL}
+                  alt="User avatar"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 text-gray-800 dark:text-white 
+                 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                 transition-all duration-300 z-50 p-4 space-y-2"
+              >
+                <p className="text-sm font-semibold">{user.displayName}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 break-all">
+                  {user.email}
+                </p>
+                <hr className="border-gray-200 dark:border-gray-700" />
+                <button
+                  onClick={handleSignOutUser}
+                  className="w-full text-center text-red-600 hover:underline text-sm"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Open menu">
@@ -141,17 +201,9 @@ const DashboardNavbar = () => {
                 {/* Sidebar Menu (full) */}
                 <div className="border-t pt-4">{renderSidebarMenu()}</div>
 
-                <ThemeToggle />
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => {
-                    handleSignOutUser();
-                    setOpen(false);
-                  }}
-                >
-                  Logout
-                </Button>
+                <div className="pl-3">
+                  <ThemeToggle />
+                </div>
               </div>
             </SheetContent>
           </Sheet>

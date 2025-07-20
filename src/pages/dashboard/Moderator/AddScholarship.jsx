@@ -56,7 +56,7 @@ const AddScholarship = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-900 shadow-xl rounded-xl">
+    <div className="max-w-3xl mx-auto p-6 bg-[#f8f4ee] dark:bg-[#2a2524] shadow-xl rounded-xl mt-10">
       <h1 className="text-2xl font-bold mb-6">Add Scholarship</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}

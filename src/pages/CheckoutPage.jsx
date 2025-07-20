@@ -18,6 +18,7 @@ import {
 import uploadImageToImgbb from "@/utils/uploadImageToImgbb";
 import { PulseLoader } from "react-spinners";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import Loading from "@/components/loading/Loading";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
@@ -87,7 +88,7 @@ const CheckoutPage = () => {
     }
   };
 
-  if (!scholarship) return <p className="text-center py-10">Loading...</p>;
+  if (!scholarship) return <Loading></Loading>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">

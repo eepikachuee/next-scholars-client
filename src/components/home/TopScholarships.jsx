@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Button } from "@/components/ui/button";
 import ScholarshipCard from "../scholarshipCard/ScholarshipCard";
+import Loading from "../loading/Loading";
 
 const TopScholarships = () => {
   const axiosPublic = useAxiosPublic();
@@ -16,7 +17,7 @@ const TopScholarships = () => {
     },
   });
 
-  if (isLoading) return <p className="text-center py-10">Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
 
   // Sort by low applicationFees and recent postDate
   const topScholarships = [...scholarships]

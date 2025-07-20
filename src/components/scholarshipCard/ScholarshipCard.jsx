@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "../loading/Loading";
 
 const ScholarshipCard = ({ data }) => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const ScholarshipCard = ({ data }) => {
     _id,
   } = data;
 
-  const { data: reviews = [], isLoading } = useQuery({
+  const { data: reviews = [] } = useQuery({
     queryKey: ["reviews-by-scholarship", _id],
     queryFn: async () => {
       const res = await axiosPublic.get(`/reviews/${_id}`);
@@ -32,7 +33,7 @@ const ScholarshipCard = ({ data }) => {
 
   // console.log(reviews);
 
-  if (isLoading) return <p className="text-center py-10">Loading...</p>;
+  // if (isLoading) return <Loading></Loading>;
 
   return (
     <motion.div
