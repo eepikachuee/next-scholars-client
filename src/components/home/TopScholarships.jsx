@@ -31,8 +31,8 @@ const TopScholarships = () => {
     .slice(0, 6);
 
   return (
-    <section className="my-12 px-4 max-w-7xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-6 text-center">
+    <section className="my-12 px-4 max-w-7xl mx-auto mt-32">
+      <h2 className="text-3xl font-semibold mb-10 text-center">
         Top Scholarships
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
