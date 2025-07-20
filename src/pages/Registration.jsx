@@ -11,7 +11,7 @@ import GoogleLoginButton from "@/components/button/GoogleLoginButton";
 import useSaveUser from "@/hooks/useSaveUser";
 
 const Registration = () => {
-  const { handleCreateUser, updateUser } = useContext(AuthContext);
+  const { handleCreateUser, updateUser, setUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -28,12 +28,19 @@ const Registration = () => {
     const { name, email, password, photoURL } = data;
 
     try {
-      await handleCreateUser(email, password);
+      const result = await handleCreateUser(email, password);
 
       // Correct usage
       await updateUser({
         displayName: name,
         photoURL,
+      });
+
+      setUser({
+        ...result.user,
+        displayName: name,
+        photoURL,
+        role: "user",
       });
 
       await saveUser({

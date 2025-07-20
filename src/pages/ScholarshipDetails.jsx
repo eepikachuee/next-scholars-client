@@ -7,6 +7,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
@@ -110,40 +114,51 @@ const ScholarshipDetails = () => {
 
       <h4 className="font-bold text-3xl pt-10">Review</h4>
 
-      <div className="grid grid-cols-3 gap-5 pt-5">
+      <div className="pt-5">
         {reviews.length ? (
-          reviews.map((review) => (
-            <Card key={review._id} className="shadow-md p-4 flex flex-col">
-              <CardContent>
-                <h3 className="text-lg font-semibold mb-1">
-                  🎓 {review.universityName}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-1">
-                  Subject:{" "}
-                  <span className="font-medium">{review.subjectCategory}</span>
-                </p>
-                <div className="flex items-center gap-3 mt-2 mb-2">
-                  <img
-                    src={review.userImage}
-                    alt="Reviewer"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold">{review.userName}</p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(review.reviewDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-yellow-500 font-semibold">
-                  ⭐ {review.rating}
-                </p>
-                <p className="mt-2 italic text-gray-800">{review.comment}</p>
-              </CardContent>
-            </Card>
-          ))
+          <Swiper
+            spaceBetween={20}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            modules={[Pagination]}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+          >
+            {reviews.map((review) => (
+              <SwiperSlide key={review._id}>
+                <Card className=" border  h-full">
+                  <CardContent className="p-6 flex flex-col h-full justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 my-3">
+                        <img
+                          src={review.userImage}
+                          alt="Reviewer"
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="font-semibold">{review.userName}</p>
+                          <p className="text-sm ">
+                            {new Date(review.reviewDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      <p className="text-yellow-400 font-semibold">
+                        ⭐ {review.rating}
+                      </p>
+                      <p className="mt-2 italic ">{review.comment}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         ) : (
-          <p>No review available</p>
+          <p className="text-muted-foreground">No reviews available.</p>
         )}
       </div>
     </div>

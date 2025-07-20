@@ -55,7 +55,7 @@ const HeroSection = () => {
                 </h1>
                 <p className="mb-6 text-lg md:text-xl">{banner.description}</p>
                 <Button
-                  variant="secondary"
+                  variant="default"
                   className="text-base px-6 py-3"
                   onClick={() => navigate("/scholarships")}
                 >

@@ -45,11 +45,11 @@ const Navbar = () => {
 
   return (
     <header
-      className={`w-full fixed top-0 left-0 z-50 px-4 py-3 transition-all duration-300
+      className={`w-full  fixed top-0 left-0 z-50 px-4 py-3 transition-all duration-300
         ${showNavbar ? "translate-y-0" : "-translate-y-full"}
         backdrop-blur-md bg-white/45 dark:bg-[#0f0f0f]/30 shadow-sm`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between h-[49px]">
         {/* Logo */}
         <NavLink to="/" className="text-2xl font-bold text-primary">
           🎓 NextScholars

@@ -102,7 +102,7 @@ const CheckoutPage = () => {
       >
         {/* Phone Number */}
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-700">
+          <label className="block mb-1 text-sm font-medium ">
             Phone Number
           </label>
           <Input
@@ -117,7 +117,7 @@ const CheckoutPage = () => {
 
         {/* Photo Upload */}
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-700">
+          <label className="block mb-1 text-sm font-medium ">
             Upload Your Photo
           </label>
           <Input
@@ -132,9 +132,7 @@ const CheckoutPage = () => {
 
         {/* Address */}
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-700">
-            Address
-          </label>
+          <label className="block mb-1 text-sm font-medium ">Address</label>
           <Input
             {...register("address", { required: "Address is required" })}
             placeholder="Enter your address"
@@ -151,9 +149,7 @@ const CheckoutPage = () => {
         <div className="flex flex-col md:flex-row gap-4">
           {/* Gender */}
           <div className="w-full md:w-1/3">
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Gender
-            </label>
+            <label className="block mb-1 text-sm font-medium ">Gender</label>
             <Controller
               name="gender"
               control={control}
@@ -181,7 +177,7 @@ const CheckoutPage = () => {
 
           {/* Degree */}
           <div className="w-full md:w-1/3">
-            <label className="block mb-1 text-sm font-medium text-gray-700">
+            <label className="block mb-1 text-sm font-medium ">
               Applying Degree
             </label>
             <Controller
@@ -211,7 +207,7 @@ const CheckoutPage = () => {
 
           {/* Study Gap */}
           <div className="w-full md:w-1/3">
-            <label className="block mb-1 text-sm font-medium text-gray-700">
+            <label className="block mb-1 text-sm font-medium ">
               Study Gap (optional)
             </label>
             <Controller
@@ -237,9 +233,7 @@ const CheckoutPage = () => {
         {/* SSC & HSC GPA */}
         <div className="flex flex-col md:flex-row gap-4">
           <div className="w-full md:w-1/2">
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              SSC GPA
-            </label>
+            <label className="block mb-1 text-sm font-medium ">SSC GPA</label>
             <Input
               {...register("ssc", { required: "SSC GPA is required" })}
               className="w-full"
@@ -250,9 +244,7 @@ const CheckoutPage = () => {
           </div>
 
           <div className="w-full md:w-1/2">
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              HSC GPA
-            </label>
+            <label className="block mb-1 text-sm font-medium ">HSC GPA</label>
             <Input
               {...register("hsc", { required: "HSC GPA is required" })}
               className="w-full"
@@ -267,19 +259,19 @@ const CheckoutPage = () => {
         {scholarship && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1 text-sm font-medium ">
                 University Name
               </label>
               <Input defaultValue={scholarship.universityName} readOnly />
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1 text-sm font-medium ">
                 Scholarship Category
               </label>
               <Input defaultValue={scholarship.scholarshipCategory} readOnly />
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-1 text-sm font-medium ">
                 Subject Category
               </label>
               <Input defaultValue={scholarship.subjectCategory} readOnly />
