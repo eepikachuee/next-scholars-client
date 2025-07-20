@@ -11,10 +11,19 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import Swal from "sweetalert2";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AllAppliedScholarships = () => {
   const axiosSecure = useAxiosSecure();
   const [applications, setApplications] = useState([]);
+  const [filteredApps, setFilteredApps] = useState([]);
+  const [sortBy, setSortBy] = useState(""); // track selected sort option
   const [selectedApp, setSelectedApp] = useState(null);
   const [feedbackModal, setFeedbackModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
@@ -23,11 +32,28 @@ const AllAppliedScholarships = () => {
   const fetchApplications = async () => {
     const res = await axiosSecure.get("/allAppliedScholarships");
     setApplications(res.data);
+    setFilteredApps(res.data); // initially no sorting, show as fetched
   };
 
   useEffect(() => {
     fetchApplications();
   }, []);
+
+  const handleSortChange = (value) => {
+    setSortBy(value);
+    let sorted = [...applications];
+
+    if (value === "appliedDate") {
+      sorted.sort((a, b) => new Date(b.applyDate) - new Date(a.applyDate));
+    } else if (value === "deadline") {
+      sorted.sort(
+        (a, b) =>
+          new Date(a.scholarshipDeadline) - new Date(b.scholarshipDeadline)
+      );
+    }
+
+    setFilteredApps(sorted);
+  };
 
   const handleCancel = async (id) => {
     const confirm = await Swal.fire({
@@ -64,7 +90,21 @@ const AllAppliedScholarships = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">All Applied Scholarships</h2>
+      <div className="flex flex-col items-center mb-4">
+        <h2 className="text-2xl font-bold mb-2">All Applied Scholarships</h2>
+        <Select value={sortBy} onValueChange={handleSortChange}>
+          <SelectTrigger className="w-64">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="appliedDate">Sort by Applied Date</SelectItem>
+            <SelectItem value="deadline">
+              Sort by Scholarship Deadline
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full border">
           <thead className="bg-gray-100 dark:bg-gray-800">
@@ -78,7 +118,7 @@ const AllAppliedScholarships = () => {
             </tr>
           </thead>
           <tbody>
-            {applications.map((app) => (
+            {filteredApps.map((app) => (
               <tr key={app._id}>
                 <td className="p-2 border">{app.userName}</td>
                 <td className="p-2 border">{app.universityName}</td>
