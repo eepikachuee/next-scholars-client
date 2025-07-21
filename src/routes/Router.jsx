@@ -19,11 +19,13 @@ import AdminManageUsers from "@/pages/dashboard/Admin/AdminManageUsers";
 import AdminRoute from "./AdminRoute";
 import ModeratorRoute from "./ModeratorRoute";
 import AnalyticsDashboard from "@/pages/dashboard/AnalyticsDashboard";
+import NotFoundPage from "@/pages/errorPage/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    errorElement: <NotFoundPage></NotFoundPage>,
     children: [
       {
         path: "/",
@@ -65,6 +67,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "dashboard",
+    errorElement: <NotFoundPage></NotFoundPage>,
     element: (
       <PrivateRoute>
         <DashboardLayout />
@@ -100,7 +103,7 @@ export const router = createBrowserRouter([
       },
 
       // Moderator routes
-      // { path: "moderator", element: <AnalyticsDashboard /> },
+      { path: "moderator", element: <AnalyticsDashboard /> },
       {
         path: "moderator/myProfile",
         element: (
@@ -153,7 +156,7 @@ export const router = createBrowserRouter([
       },
 
       // Admin routes
-      // { path: "admin", element: <AnalyticsDashboard /> },
+      { path: "admin", element: <AnalyticsDashboard /> },
       {
         path: "admin/myProfile",
         element: (
@@ -216,4 +219,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // {
+  //   path: "*",
+  //   element: <NotFoundPage />,
+  // },
 ]);

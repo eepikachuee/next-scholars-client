@@ -39,7 +39,7 @@ const HeroSection = () => {
         autoplay={{ delay: 4000 }}
         loop={true}
         pagination={{ clickable: true }}
-        className="w-full h-[90vh]"
+        className="w-full h-[93vh]"
       >
         {banners.map((banner) => (
           <SwiperSlide key={banner.id}>
