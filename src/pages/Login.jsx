@@ -42,8 +42,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-md p-8 space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#fdfbf7]  dark:bg-[#1b1817] px-4">
+      <div className="max-w-md w-full bg-[#f8f4ee] dark:bg-[#2a2524] rounded-xl shadow-md p-8 space-y-6">
         <h2 className="text-2xl font-bold text-center text-primary">
           Login to NextScholars
         </h2>

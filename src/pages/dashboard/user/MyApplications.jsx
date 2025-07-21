@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import EditApplicationModal from "@/components/modal/EditApplicationModal/EditApplicationModal";
 import AddReviewModal from "@/components/modal/AddReviewModal/AddReviewModal";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import Loading from "@/components/loading/Loading";
 
 const MyApplications = () => {
   const { user } = useContext(AuthContext);
@@ -68,7 +69,7 @@ const MyApplications = () => {
     }
   };
 
-  if (isLoading) return <p className="text-center py-10">Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
 
   return (
     <div className="overflow-x-auto p-4">

@@ -10,8 +10,8 @@ const useAxiosSecure = () => {
   const { user, handleSignOutUser, loading } = useContext(AuthContext);
 
   useEffect(() => {
-    if (!loading) {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    if (!loading && token) {
       // Add request interceptor
       const requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {

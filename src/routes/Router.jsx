@@ -20,6 +20,7 @@ import AdminRoute from "./AdminRoute";
 import ModeratorRoute from "./ModeratorRoute";
 import AnalyticsDashboard from "@/pages/dashboard/AnalyticsDashboard";
 import NotFoundPage from "@/pages/errorPage/NotFoundPage";
+import UserRoute from "./UserRoute";
 
 export const router = createBrowserRouter([
   {
@@ -89,7 +90,9 @@ export const router = createBrowserRouter([
         path: "user/applications",
         element: (
           <PrivateRoute>
-            <MyApplications />
+            <UserRoute>
+              <MyApplications />
+            </UserRoute>
           </PrivateRoute>
         ),
       },
@@ -97,7 +100,9 @@ export const router = createBrowserRouter([
         path: "user/reviews",
         element: (
           <PrivateRoute>
-            <MyReviews />
+            <UserRoute>
+              <MyReviews />
+            </UserRoute>
           </PrivateRoute>
         ),
       },

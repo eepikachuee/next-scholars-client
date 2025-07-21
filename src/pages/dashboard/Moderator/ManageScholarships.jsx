@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
+import Loading from "@/components/loading/Loading";
 
 const ManageScholarships = () => {
   const { user } = useContext(AuthContext);
@@ -92,7 +93,7 @@ const ManageScholarships = () => {
     updateMutation.mutate({ id: editingScholarship._id, data: updatedData });
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
   if (isError) return <p>Error: {error.message}</p>;
 
   return (

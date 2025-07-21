@@ -11,20 +11,20 @@ const MyReviews = () => {
   const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchReviews = async () => {
-    try {
-      const res = await axiosSecure.get(`/reviews/user/${user.email}`);
-      setReviews(res.data);
-    } catch (error) {
-      console.error("Error fetching reviews", error);
-    }
-  };
-
   //   console.log(reviews);
 
   useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await axiosSecure.get(`/reviews/user/${user.email}`);
+        setReviews(res.data);
+      } catch (error) {
+        console.error("Error fetching reviews", error);
+      }
+    };
+
     fetchReviews();
-  }, [user]);
+  }, [user, axiosSecure]);
 
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({

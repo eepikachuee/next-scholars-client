@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 // import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { useState } from "react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import Loading from "@/components/loading/Loading";
 
 const AdminManageUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -82,7 +83,7 @@ const AdminManageUsers = () => {
 
   const handleFilter = (role) => setFilterRole(role);
 
-  if (isLoading) return <p className="p-6">Loading users...</p>;
+  if (isLoading) return <Loading></Loading>;
   if (isError) return <p className="p-6 text-red-500">Failed to load users</p>;
 
   return (

@@ -63,8 +63,8 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted dark:bg-gray-950 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#fdfbf7]  dark:bg-[#1b1817] px-4">
+      <div className="w-full max-w-md bg-[#f8f4ee] dark:bg-[#2a2524] p-8 rounded-2xl shadow-xl space-y-6">
         <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
           Create an Account
         </h2>
