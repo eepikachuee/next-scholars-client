@@ -6,6 +6,8 @@ const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
+let requestInterceptor;
+
 const useAxiosSecure = () => {
   const { user, handleSignOutUser, loading } = useContext(AuthContext);
 
@@ -13,12 +15,10 @@ const useAxiosSecure = () => {
     const token = localStorage.getItem("token");
     if (!loading && token) {
       // Add request interceptor
-      const requestInterceptor = axiosInstance.interceptors.request.use(
-        (config) => {
-          config.headers.Authorization = `Bearer ${token}`;
-          return config;
-        }
-      );
+      requestInterceptor = axiosInstance.interceptors.request.use((config) => {
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+      });
 
       // Add response interceptor
       const responseInterceptor = axiosInstance.interceptors.response.use(
@@ -34,6 +34,10 @@ const useAxiosSecure = () => {
           return Promise.reject(err);
         }
       );
+
+      if (!user && requestInterceptor) {
+        return axiosInstance.interceptors.request.eject(requestInterceptor);
+      }
 
       // Cleanup to prevent multiple interceptors on re-renders
       return () => {

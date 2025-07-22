@@ -1,23 +1,33 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Swal from "sweetalert2";
 import useAxiosPublic from "@/hooks/useAxiosPublic";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import { AuthContext } from "@/providers/AuthContext";
+import Loading from "@/components/loading/Loading";
 
 const AllReviews = () => {
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
-  const [reviews, setReviews] = useState([]);
+  const { user } = useContext(AuthContext);
 
-  const fetchReviews = async () => {
-    try {
+  //
+  const {
+    data: reviews = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    enabled: !!user?.email && !!localStorage.getItem("token"),
+    queryKey: ["reviewsUser"],
+
+    queryFn: async () => {
       const res = await axiosSecure.get("/reviews");
-      setReviews(res.data);
-    } catch (error) {
-      console.error("Error loading reviews", error);
-    }
-  };
+      return res.data;
+    },
+  });
 
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
@@ -32,16 +42,16 @@ const AllReviews = () => {
       try {
         await axiosPublic.delete(`/reviews/${id}`);
         Swal.fire("Deleted!", "Review has been deleted.", "success");
-        fetchReviews();
+        // fetchReviews();
+        refetch();
       } catch {
         Swal.fire("Error!", "Failed to delete review.", "error");
       }
     }
   };
 
-  useEffect(() => {
-    fetchReviews();
-  }, []);
+  if (isLoading) return <Loading></Loading>;
+  if (isError) return <p className="p-6 text-red-500">Failed to load users</p>;
 
   return (
     <div className="p-6">

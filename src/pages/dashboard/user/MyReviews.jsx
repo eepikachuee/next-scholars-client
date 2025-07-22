@@ -1,30 +1,47 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "@/providers/AuthContext";
 import Swal from "sweetalert2";
 import EditReviewModal from "@/components/modal/EditReviewModal";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/loading/Loading";
 
 const MyReviews = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
-  const [reviews, setReviews] = useState([]);
+  // const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   //   console.log(reviews);
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await axiosSecure.get(`/reviews/user/${user.email}`);
-        setReviews(res.data);
-      } catch (error) {
-        console.error("Error fetching reviews", error);
-      }
-    };
+  //
+  const {
+    data: reviews = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    enabled: !!user?.email && !!localStorage.getItem("token"),
+    queryKey: ["reviewsUser", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/reviews/user/${user.email}`);
+      return res.data;
+    },
+  });
 
-    fetchReviews();
-  }, [user, axiosSecure]);
+  // useEffect(() => {
+  //   const fetchReviews = async () => {
+  //     try {
+  //       const res = await axiosSecure.get(`/reviews/user/${user.email}`);
+  //       setReviews(res.data);
+  //     } catch (error) {
+  //       console.error("Error fetching reviews", error);
+  //     }
+  //   };
+
+  //   fetchReviews();
+  // }, [user, axiosSecure]);
 
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
@@ -39,7 +56,8 @@ const MyReviews = () => {
       try {
         await axiosSecure.delete(`/reviews/${id}`);
         Swal.fire("Deleted!", "Your review has been deleted.", "success");
-        fetchReviews(); // refresh table
+        // fetchReviews();
+        refetch();
       } catch {
         Swal.fire("Error!", "Failed to delete review.", "error");
       }
@@ -50,6 +68,9 @@ const MyReviews = () => {
     setIsModalOpen(false);
     document.activeElement?.blur(); // remove focus to avoid aria-hidden conflict
   };
+
+  if (isLoading) return <Loading></Loading>;
+  if (isError) return <p className="p-6 text-red-500">Failed to load users</p>;
 
   return (
     <div className="p-4">
@@ -100,7 +121,7 @@ const MyReviews = () => {
           open={isModalOpen}
           onClose={handleClose}
           review={selectedReview}
-          onSuccess={fetchReviews}
+          onSuccess={refetch}
         />
       )}
     </div>

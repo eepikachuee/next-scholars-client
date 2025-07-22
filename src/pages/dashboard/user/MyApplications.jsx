@@ -41,7 +41,9 @@ const MyApplications = () => {
     isLoading,
     refetch,
   } = useQuery({
+    enabled: !!user?.email && !!localStorage.getItem("token"),
     queryKey: ["myApplications", user?.email],
+
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/appliedScholarships/user/${user?.email}`

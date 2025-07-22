@@ -9,14 +9,16 @@ import {
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
 // import useAxiosPublic from "@/hooks/useAxiosPublic";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Loading from "@/components/loading/Loading";
+import { AuthContext } from "@/providers/AuthContext";
 
 const AdminManageUsers = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [filterRole, setFilterRole] = useState("all");
+  const { user } = useContext(AuthContext);
 
   // FETCH USERS
   const {
@@ -24,7 +26,9 @@ const AdminManageUsers = () => {
     isLoading,
     isError,
   } = useQuery({
+    enabled: !!user?.email && !!localStorage.getItem("token"),
     queryKey: ["users"],
+
     queryFn: async () => {
       const res = await axiosSecure.get("/users");
       return res.data;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AuthContext } from "@/providers/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "@/components/loading/Loading";
 
 const AllAppliedScholarships = () => {
   const axiosSecure = useAxiosSecure();
@@ -28,16 +31,34 @@ const AllAppliedScholarships = () => {
   const [feedbackModal, setFeedbackModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
+  const { user } = useContext(AuthContext);
 
-  const fetchApplications = async () => {
-    const res = await axiosSecure.get("/allAppliedScholarships");
-    setApplications(res.data);
-    setFilteredApps(res.data); // initially no sorting, show as fetched
-  };
+  //
+  const {
+    data: application = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    enabled: !!user?.email && !!localStorage.getItem("token"),
+    queryKey: ["application"],
+
+    queryFn: async () => {
+      const res = await axiosSecure.get("/allAppliedScholarships");
+      return res.data;
+    },
+  });
 
   useEffect(() => {
-    fetchApplications();
-  }, []);
+    if (application?.length) {
+      setApplications(application);
+      setFilteredApps(application);
+    }
+  }, [application]);
+
+  // useEffect(() => {
+  //   fetchApplications();
+  // }, []);
 
   const handleSortChange = (value) => {
     setSortBy(value);
@@ -70,7 +91,8 @@ const AllAppliedScholarships = () => {
           status: "rejected",
         });
         Swal.fire("Rejected!", "Application has been rejected.", "success");
-        fetchApplications();
+        // fetchApplications();
+        refetch();
       } catch (error) {
         console.error("Error rejecting application:", error);
         Swal.fire("Error!", "Failed to reject application", "error");
@@ -85,8 +107,12 @@ const AllAppliedScholarships = () => {
     });
     setFeedbackModal(false);
     Swal.fire("Feedback Sent!", "Feedback has been submitted.", "success");
-    fetchApplications();
+    // fetchApplications();
+    refetch();
   };
+
+  if (isLoading) return <Loading></Loading>;
+  if (isError) return <p className="p-6 text-red-500">Failed to load users</p>;
 
   return (
     <div className="p-4">
